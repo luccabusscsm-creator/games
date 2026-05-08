@@ -3,199 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>🎮 Luquinha Games</title>
+<title>Luquinha Games</title>
 
 <style>
-
-/* ===== GERAL ===== */
-
 body{
 margin:0;
-font-family:Arial;
-background:black;
+font-family:Arial, Helvetica, sans-serif;
+background:#0b0f1a;
 color:white;
-overflow-x:hidden;
-text-align:center;
 }
 
-/* ===== FUNDO ESPACIAL ===== */
+/* topo */
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+header{
+background:#111;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 0 20px cyan;
 }
 
-/* ===== TELA DE CARREGAMENTO ===== */
+.logo{
+font-size:26px;
+color:#00ffff;
+}
 
-#loading{
-position:fixed;
+/* ranking */
+
+#ranking{
+padding:20px;
+background:#0e1424;
+}
+
+#ranking h2{
+margin-top:0;
+}
+
+/* biblioteca */
+
+.games{
+display:flex;
+flex-wrap:wrap;
+gap:25px;
+padding:30px;
+justify-content:center;
+}
+
+/* card */
+
+.card{
+background:#1b1b1b;
+width:260px;
+border-radius:12px;
+overflow:hidden;
+transition:.3s;
+box-shadow:0 0 15px rgba(0,255,255,.2);
+position:relative;
+}
+
+.card:hover{
+transform:scale(1.05);
+box-shadow:0 0 30px cyan;
+}
+
+.poster{
+width:100%;
+height:150px;
+object-fit:cover;
+}
+
+/* trailer */
+
+.trailer{
+position:absolute;
 top:0;
 left:0;
 width:100%;
-height:100%;
-background:black;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:9999;
-animation:fadeOut 1s forwards;
-animation-delay:4s;
+height:150px;
+display:none;
 }
 
-#loadingText{
-font-size:55px;
-color:#00ffff;
-text-shadow:
-0 0 10px cyan,
-0 0 20px cyan,
-0 0 40px cyan;
-animation:pulse 1.5s infinite;
+.card:hover .trailer{
+display:block;
 }
 
-.loader{
-margin-top:20px;
-width:70px;
-height:70px;
-border:6px solid #222;
-border-top:6px solid cyan;
-border-radius:50%;
-animation:spin 1s linear infinite;
-}
+/* conteudo */
 
-/* ===== TOPO ===== */
-
-h1{
-margin-top:20px;
-font-size:45px;
-text-shadow:0 0 20px cyan;
-}
-
-/* ===== LOGIN ===== */
-
-#loginBox{
-margin-top:20px;
-}
-
-input{
-padding:10px;
-border:none;
-border-radius:10px;
-width:220px;
+.content{
+padding:15px;
+text-align:center;
 }
 
 button{
-padding:10px 20px;
+padding:8px 15px;
 border:none;
-border-radius:10px;
+border-radius:8px;
 background:#00ffff;
 cursor:pointer;
-font-weight:bold;
-transition:.3s;
+margin-top:8px;
 }
 
 button:hover{
 background:#00bbbb;
-transform:scale(1.05);
 }
 
-/* ===== PERFIL ===== */
-
-#profile{
-margin:20px;
-font-size:20px;
-}
-
-/* ===== JOGOS ===== */
-
-.games{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-padding:30px;
-}
-
-.card{
-background:#111;
-border-radius:15px;
-padding:20px;
-transition:.3s;
-cursor:pointer;
-box-shadow:0 0 15px rgba(0,255,255,.3);
-}
-
-.card:hover{
-transform:scale(1.08);
-box-shadow:0 0 30px cyan;
-}
-
-.icon{
-font-size:70px;
-}
-
-/* ===== ESTRELAS ===== */
+/* estrelas */
 
 .stars{
-margin-top:10px;
+margin-top:8px;
 }
 
-.stars span{
-font-size:22px;
+.star{
+font-size:20px;
 cursor:pointer;
+color:#555;
 }
 
-/* ===== LEADERBOARD ===== */
-
-#leaderboard{
-background:#111;
-margin:30px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 20px cyan;
-}
-
-#leaderboard h2{
-margin-top:0;
-}
-
-li{
-margin:8px;
-}
-
-/* ===== ANIMAÇÕES ===== */
-
-@keyframes spin{
-100%{
-transform:rotate(360deg);
-}
-}
-
-@keyframes pulse{
-
-0%{
-transform:scale(1);
-}
-
-50%{
-transform:scale(1.1);
-}
-
-100%{
-transform:scale(1);
-}
-
-}
-
-@keyframes fadeOut{
-
-to{
-opacity:0;
-visibility:hidden;
-}
-
+.star.active{
+color:gold;
 }
 
 </style>
@@ -203,352 +129,161 @@ visibility:hidden;
 
 <body>
 
-<!-- ===== LOADING ===== -->
-
-<div id="loading">
-
-<h1 id="loadingText">
-🎮 LUQUINHA GAMES
-</h1>
-
-<div class="loader"></div>
-
-</div>
-
-<!-- ===== FUNDO ===== -->
-
-<canvas id="space"></canvas>
-
-<!-- ===== TITULO ===== -->
-
-<h1>🎮 LUQUINHA GAMES</h1>
-
-<!-- ===== LOGIN ===== -->
-
-<div id="loginBox">
-
-<input id="name" placeholder="Digite seu nome">
-
-<button onclick="login()">
-Entrar
-</button>
-
-</div>
-
-<!-- ===== PERFIL ===== -->
-
-<div id="profile"></div>
-
-<!-- ===== JOGOS ===== -->
-
-<div class="games">
-
-<!-- CAPY CARE -->
-
-<div class="card"
-onclick="play('https://luquinha835.github.io/capy-care-/','Capy Care')">
-
-<div class="icon">🐹</div>
-
-<h3>Capy Care</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'capy',1)">⭐</span>
-<span onclick="rate(event,'capy',2)">⭐</span>
-<span onclick="rate(event,'capy',3)">⭐</span>
-<span onclick="rate(event,'capy',4)">⭐</span>
-<span onclick="rate(event,'capy',5)">⭐</span>
-
-</div>
-
-</div>
-
-<!-- FLYPY -->
-
-<div class="card"
-onclick="play('https://luquinha835.github.io/flypy-plane/','Flypy Plane')">
-
-<div class="icon">✈️</div>
-
-<h3>Flypy Plane</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'plane',1)">⭐</span>
-<span onclick="rate(event,'plane',2)">⭐</span>
-<span onclick="rate(event,'plane',3)">⭐</span>
-<span onclick="rate(event,'plane',4)">⭐</span>
-<span onclick="rate(event,'plane',5)">⭐</span>
-
-</div>
-
-</div>
-
-<!-- NAVE -->
-
-<div class="card"
-onclick="play('https://luquinha835.github.io/nave-game','Nave Space')">
-
-<div class="icon">🚀</div>
-
-<h3>Nave Space</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'nave',1)">⭐</span>
-<span onclick="rate(event,'nave',2)">⭐</span>
-<span onclick="rate(event,'nave',3)">⭐</span>
-<span onclick="rate(event,'nave',4)">⭐</span>
-<span onclick="rate(event,'nave',5)">⭐</span>
-
-</div>
-
-</div>
-
-<!-- MATEMÁTICA -->
-
-<div class="card"
-onclick="play('https://luquinha835.github.io/desfio-matematico','Matemática')">
-
-<div class="icon">🧠</div>
-
-<h3>Desafio Matemático</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'math',1)">⭐</span>
-<span onclick="rate(event,'math',2)">⭐</span>
-<span onclick="rate(event,'math',3)">⭐</span>
-<span onclick="rate(event,'math',4)">⭐</span>
-<span onclick="rate(event,'math',5)">⭐</span>
-
-</div>
-
-</div>
-
-<!-- MARMOTA -->
-
-<div class="card"
-onclick="play('https://luquinha835.github.io/marmot-game','Marmota')">
-
-<div class="icon">🔨</div>
-
-<h3>Bater na Marmota</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'marmot',1)">⭐</span>
-<span onclick="rate(event,'marmot',2)">⭐</span>
-<span onclick="rate(event,'marmot',3)">⭐</span>
-<span onclick="rate(event,'marmot',4)">⭐</span>
-<span onclick="rate(event,'marmot',5)">⭐</span>
-
-</div>
-
-</div>
-
-<!-- MINECRAFT -->
-
-<div class="card"
-onclick="play('https://classic.minecraft.net','Minecraft Classic')">
-
-<div class="icon">🧱</div>
-
-<h3>Minecraft Classic</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'mc',1)">⭐</span>
-<span onclick="rate(event,'mc',2)">⭐</span>
-<span onclick="rate(event,'mc',3)">⭐</span>
-<span onclick="rate(event,'mc',4)">⭐</span>
-<span onclick="rate(event,'mc',5)">⭐</span>
-
-</div>
-
-</div>
-
-<!-- TERROR -->
-
-<div class="card"
-onclick="play('https://www.figma.com/make/GzJgXyUa7kstmVc8ZNCpYD/Jogo-de-Terror-em-HTML?p=f&t=3iCBGKklE2VGvzEe-0&fullscreen=1','Mansão do Terror')">
-
-<div class="icon">🏚️</div>
-
-<h3>Mansão do Terror</h3>
-
-<div class="stars">
-
-<span onclick="rate(event,'terror',1)">⭐</span>
-<span onclick="rate(event,'terror',2)">⭐</span>
-<span onclick="rate(event,'terror',3)">⭐</span>
-<span onclick="rate(event,'terror',4)">⭐</span>
-<span onclick="rate(event,'terror',5)">⭐</span>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===== LEADERBOARD ===== -->
-
-<div id="leaderboard">
-
-<h2>🏆 Ranking Global</h2>
-
-<ul id="rankList"></ul>
-
-</div>
+<header>
+<div class="logo">🎮 LUQUINHA GAMES</div>
+<div>Jogos do navegador</div>
+</header>
+
+<section id="ranking">
+<h2>🏆 Ranking de Jogos</h2>
+<ol id="rankList"></ol>
+</section>
+
+<section class="games" id="games"></section>
 
 <script>
 
-/* ===== LOGIN ===== */
+const games = [
 
-let player=""
+{
+name:"Capy Care",
+link:"https://luquinha835.github.io/capy-care-/",
+poster:"https://images.unsplash.com/photo-1552410260-0fd9b577afa6",
+trailer:"https://www.youtube.com/embed/aqz-KE-bpKQ"
+},
 
-function login(){
+{
+name:"Flypy Plane",
+link:"https://luquinha835.github.io/flypy-plane/",
+poster:"https://images.unsplash.com/photo-1508614589041-895b88991e3e",
+trailer:"https://www.youtube.com/embed/aqz-KE-bpKQ"
+},
 
-player=document.getElementById("name").value
+{
+name:"Nave Space",
+link:"https://luquinha835.github.io/nave-game",
+poster:"https://images.unsplash.com/photo-1446776653964-20c1d3a81b06",
+trailer:"https://www.youtube.com/embed/aqz-KE-bpKQ"
+},
 
-if(!player){
+{
+name:"Desafio Matemático",
+link:"https://luquinha835.github.io/desfio-matematico",
+poster:"https://images.unsplash.com/photo-1509228468518-180dd4864904",
+trailer:"https://www.youtube.com/embed/aqz-KE-bpKQ"
+},
 
-alert("Digite seu nome")
+{
+name:"Bater na Marmota",
+link:"https://luquinha835.github.io/marmot-game",
+poster:"https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+trailer:"https://www.youtube.com/embed/aqz-KE-bpKQ"
+},
 
-return
-
+{
+name:"Minecraft Classic",
+link:"https://classic.minecraft.net",
+poster:"https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png",
+trailer:"https://www.youtube.com/embed/MmB9b5njVbA"
 }
 
-localStorage.setItem("player",player)
+]
 
-document.getElementById("profile").innerHTML=
-"🧑‍🚀 Jogador: "+player
+const container = document.getElementById("games")
 
-updateRank()
+games.forEach((game,i)=>{
 
-}
+let rating = localStorage.getItem("rating_"+game.name) || 0
 
-window.onload=function(){
+const card=document.createElement("div")
+card.className="card"
 
-player=localStorage.getItem("player")
+card.innerHTML=`
 
-if(player){
+<img class="poster" src="${game.poster}">
 
-document.getElementById("profile").innerHTML=
-"🧑‍🚀 Jogador: "+player
+<iframe class="trailer"
+src="${game.trailer}"
+frameborder="0"
+allowfullscreen>
+</iframe>
 
-}
+<div class="content">
 
-updateRank()
+<h3>${game.name}</h3>
 
-}
+<button onclick="window.open('${game.link}','_blank')">
+Jogar
+</button>
 
-/* ===== JOGAR ===== */
+<div class="stars" data-game="${game.name}">
+${[1,2,3,4,5].map(n=>`<span class="star ${n<=rating?"active":""}" data-value="${n}">★</span>`).join("")}
+</div>
 
-function play(url,game){
-
-let score=Math.floor(Math.random()*100)
-
-let data=JSON.parse(localStorage.getItem("scores")||"[]")
-
-data.push({
-name:player || "Anônimo",
-game:game,
-score:score
-})
-
-localStorage.setItem("scores",JSON.stringify(data))
-
-window.open(url,"_blank")
-
-updateRank()
-
-}
-
-/* ===== RANK ===== */
-
-function updateRank(){
-
-let data=JSON.parse(localStorage.getItem("scores")||"[]")
-
-data.sort((a,b)=>b.score-a.score)
-
-let html=""
-
-data.slice(0,10).forEach(p=>{
-
-html+=`
-<li>
-${p.name} - ${p.game} (${p.score} pts)
-</li>
+</div>
 `
 
+container.appendChild(card)
+
 })
 
-document.getElementById("rankList").innerHTML=html
+/* estrelas */
 
-}
+document.addEventListener("click",(e)=>{
 
-/* ===== ESTRELAS ===== */
+if(e.target.classList.contains("star")){
 
-function rate(e,game,value){
+const stars=e.target.parentElement.querySelectorAll(".star")
+const value=e.target.dataset.value
+const game=e.target.parentElement.dataset.game
 
-e.stopPropagation()
+stars.forEach((s,i)=>{
 
-localStorage.setItem("rate_"+game,value)
-
-alert("Você avaliou "+value+" estrelas ⭐")
-
-}
-
-/* ===== FUNDO ESPACIAL ===== */
-
-const canvas=document.getElementById("space")
-const ctx=canvas.getContext("2d")
-
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-
-let stars=[]
-
-for(let i=0;i<150;i++){
-
-stars.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2
-})
-
-}
-
-function draw(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-ctx.fillStyle="white"
-
-stars.forEach(s=>{
-
-ctx.beginPath()
-
-ctx.arc(s.x,s.y,s.r,0,Math.PI*2)
-
-ctx.fill()
-
-s.y+=0.3
-
-if(s.y>canvas.height){
-s.y=0
+if(i<value){
+s.classList.add("active")
+}else{
+s.classList.remove("active")
 }
 
 })
 
-requestAnimationFrame(draw)
+localStorage.setItem("rating_"+game,value)
+
+updateRanking()
 
 }
 
-draw()
+})
+
+/* ranking */
+
+function updateRanking(){
+
+let data=[]
+
+games.forEach(g=>{
+
+let r=localStorage.getItem("rating_"+g.name) || 0
+data.push({name:g.name,rating:Number(r)})
+
+})
+
+data.sort((a,b)=>b.rating-a.rating)
+
+const list=document.getElementById("rankList")
+list.innerHTML=""
+
+data.forEach(g=>{
+
+let li=document.createElement("li")
+li.innerText=g.name+" ⭐ "+g.rating
+list.appendChild(li)
+
+})
+
+}
+
+updateRanking()
 
 </script>
 
